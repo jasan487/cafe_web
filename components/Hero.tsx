@@ -292,7 +292,7 @@ export default function Hero() {
             <div className="motion-reel-video-wrapper">
               <video
                 ref={videoRef}
-                src="/assets/videos/hero-video.mp4"
+                src="/assets/videos/video.mp4"
                 autoPlay
                 loop
                 muted={isVideoMuted}

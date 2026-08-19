@@ -2568,6 +2568,308 @@ img {
 }
 
 /* ==========================================================================
+   CINEMATIC ROASTERY VIDEO SECTION (THEME BLENDED)
+   ========================================================================== */
+.cinematic-video-section {
+  position: relative;
+  padding: 100px 0 120px;
+  background: radial-gradient(ellipse 90% 70% at 50% 50%, #44220B 0%, #201005 60%, #0E0703 100%);
+  color: #FAF7F2;
+  overflow: hidden;
+}
+
+.video-ambient-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.video-ambient-glow.center-glow {
+  width: 700px;
+  height: 700px;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(226, 176, 117, 0.18) 0%, rgba(107, 58, 17, 0.08) 60%, transparent 80%);
+}
+
+.video-ambient-glow.left-glow {
+  width: 400px;
+  height: 400px;
+  top: 10%;
+  left: -5%;
+  background: radial-gradient(circle, rgba(215, 168, 110, 0.12) 0%, transparent 70%);
+}
+
+.video-ambient-glow.right-glow {
+  width: 450px;
+  height: 450px;
+  bottom: 10%;
+  right: -5%;
+  background: radial-gradient(circle, rgba(226, 176, 117, 0.14) 0%, transparent 70%);
+}
+
+.cinematic-canvas-wrapper {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto 50px;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.75), 0 0 50px rgba(226, 176, 117, 0.18);
+  border: 1px solid rgba(226, 176, 117, 0.35);
+  background: #0D0602;
+  aspect-ratio: 16 / 9;
+}
+
+.cinematic-main-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+}
+
+/* Edge Feather Vignette to melt into theme */
+.video-blend-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(ellipse at 50% 50%, transparent 65%, rgba(14, 7, 3, 0.4) 85%, rgba(14, 7, 3, 0.8) 100%);
+  box-shadow: inset 0 0 40px rgba(14, 7, 3, 0.6);
+}
+
+.video-floating-badge {
+  position: absolute;
+  z-index: 3;
+  background: rgba(14, 8, 4, 0.85);
+  border: 1px solid rgba(226, 176, 117, 0.35);
+  color: #FAF7F2;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.badge-top-left {
+  top: 20px;
+  left: 20px;
+}
+
+.badge-top-right {
+  top: 20px;
+  right: 20px;
+}
+
+.badge-pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #E2B075;
+  box-shadow: 0 0 8px #E2B075;
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+.center-play-overlay-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  animation: modalPopIn 0.3s ease;
+}
+
+.large-play-icon-circle {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #E2B075 0%, #C8904D 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 35px rgba(226, 176, 117, 0.7);
+  transition: all 0.3s ease;
+}
+
+.center-play-overlay-btn:hover .large-play-icon-circle {
+  transform: scale(1.12);
+  box-shadow: 0 0 50px rgba(226, 176, 117, 0.9);
+}
+
+.center-play-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #FFFFFF;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+/* Custom Controls Bar */
+.video-custom-controls-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  background: linear-gradient(to top, rgba(14, 7, 3, 0.92) 0%, rgba(14, 7, 3, 0.6) 70%, transparent 100%);
+  padding: 20px 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  backdrop-filter: blur(6px);
+}
+
+.video-progress-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.video-progress-fill {
+  height: 100%;
+  background: linear-gradient(to right, #E2B075, #F0C692);
+  transition: width 0.15s linear;
+}
+
+.controls-inner-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.controls-left-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.vid-ctrl-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #FAF7F2;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vid-ctrl-btn:hover {
+  background: #E2B075;
+  border-color: #E2B075;
+  color: #14100D;
+}
+
+.audio-status-text {
+  font-size: 0.75rem;
+}
+
+.controls-center-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(244, 239, 234, 0.8);
+  letter-spacing: 0.04em;
+}
+
+.controls-right-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 3 Value Pillars Below Video */
+.video-perks-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.video-perk-card {
+  background: rgba(26, 15, 8, 0.65);
+  border: 1px solid rgba(226, 176, 117, 0.2);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  gap: 16px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.video-perk-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(226, 176, 117, 0.45);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.perk-icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(226, 176, 117, 0.15);
+  border: 1px solid rgba(226, 176, 117, 0.3);
+  color: #E2B075;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.perk-text-group h4 {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 6px;
+}
+
+.perk-text-group p {
+  font-size: 0.82rem;
+  color: rgba(244, 239, 234, 0.7);
+  line-height: 1.55;
+}
+
+@media (max-width: 992px) {
+  .video-perks-row {
+    grid-template-columns: 1fr;
+  }
+
+  .controls-center-tag {
+    display: none;
+  }
+}
+
+/* ==========================================================================
    MODALS, DIALOGS & LIGHTBOX
    ========================================================================== */
 .custom-modal,
