@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/context/ThemeContext';
 import { useModal } from '@/context/ModalContext';
-import { Moon, Sun, ShoppingBag, Menu, X, CalendarCheck, Phone } from 'lucide-react';
+import { Moon, Sun, ShoppingBag, Menu, X, Globe, ChevronDown, User } from 'lucide-react';
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
@@ -11,12 +11,13 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const [selectedLang, setSelectedLang] = useState('EN');
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 30);
 
-      // Simple active link detection
       const sections = ['hero', 'story', 'menu', 'collection', 'gallery', 'location'];
       const scrollPosition = window.scrollY + 200;
 
@@ -42,111 +43,149 @@ export default function Navbar() {
   return (
     <header className={`site-header-wrapper ${scrolled ? 'is-scrolled' : ''}`}>
       <div className="container">
-        <div className="navbar-pill">
-          {/* Brand Logo with Sprout Motif */}
-          <a href="#hero" className="brand-logo" aria-label="Brewista Coffee House Home">
-            <div className="logo-symbol">
-              <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="sprout-logo">
-                {/* Outer delicate circle */}
-                <circle cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.3" strokeDasharray="3 3"/>
-                {/* Botanical leaves / Coffee sprout */}
-                <path d="M20 28V12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
-                <path d="M20 18C14 17 12 12 12 10C17 10 19 14 20 18Z" fill="var(--color-caramel)" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
-                <path d="M20 22C26 21 28 16 28 14C23 14 21 18 20 22Z" fill="currentColor" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+        <div className="navbar-pill-aesthetic">
+          
+          {/* Left Brand: Modern Minimal Coffee Bean + coffee logo */}
+          <a href="#hero" className="brand-logo-aesthetic" aria-label="Coffee House Home">
+            <div className="coffee-bean-icon">
+              <svg viewBox="0 0 28 28" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* Minimalist Split Pill Coffee Bean Shape */}
+                <path
+                  d="M14 4C8.477 4 4 8.477 4 14s4.477 10 10 10 10-4.477 10-10S19.523 4 14 4z"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+                <path
+                  d="M8.5 14c2.5-4 4-5.5 5.5-5.5s3 1.5 5.5 5.5c-2.5 4-4 5.5-5.5 5.5s-3-1.5-5.5-5.5z"
+                  fill="var(--color-caramel)"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                />
+                <path
+                  d="M14 8.5c0 3 0 8 0 11"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
               </svg>
             </div>
-            <div className="logo-text-group">
-              <span className="logo-title">Brewista</span>
-              <span className="logo-sub">COFFEE HOUSE</span>
-            </div>
+            <span className="brand-text-minimal">coffee</span>
           </a>
 
-          {/* Desktop Navigation Links */}
-          <nav className="desktop-nav" aria-label="Primary Navigation">
-            <ul className="nav-links">
+          {/* Center Navigation: Clean Aesthetic Links */}
+          <nav className="desktop-nav-aesthetic" aria-label="Primary Navigation">
+            <ul className="nav-links-aesthetic">
               <li>
                 <a
-                  href="#hero"
-                  className={`nav-link ${activeSection === 'home' ? 'active' : ''}`}
+                  href="#gallery"
+                  className={`nav-link-aesthetic ${activeSection === 'gallery' ? 'active' : ''}`}
                 >
-                  HOME
+                  Gallery
                 </a>
               </li>
               <li>
                 <a
                   href="#story"
-                  className={`nav-link ${activeSection === 'story' ? 'active' : ''}`}
+                  className={`nav-link-aesthetic ${activeSection === 'story' ? 'active' : ''}`}
                 >
-                  ABOUT US
+                  About us
                 </a>
               </li>
               <li>
                 <a
                   href="#menu"
-                  className={`nav-link ${activeSection === 'menu' ? 'active' : ''}`}
+                  className={`nav-link-aesthetic ${activeSection === 'menu' ? 'active' : ''}`}
                 >
-                  MENU
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#collection"
-                  className={`nav-link ${activeSection === 'collection' ? 'active' : ''}`}
-                >
-                  SPECIALS
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#gallery"
-                  className={`nav-link ${activeSection === 'gallery' ? 'active' : ''}`}
-                >
-                  GALLERY
+                  Menu
                 </a>
               </li>
               <li>
                 <a
                   href="#location"
-                  className={`nav-link ${activeSection === 'location' ? 'active' : ''}`}
+                  className={`nav-link-aesthetic ${activeSection === 'location' ? 'active' : ''}`}
                 >
-                  CONTACT
+                  Contact
                 </a>
               </li>
             </ul>
           </nav>
 
-          {/* Right Nav Actions */}
-          <div className="nav-actions">
-            {/* Primary Order Online / Table Pill CTA */}
+          {/* Right Section: User Profile Avatar, Language, Theme & Actions */}
+          <div className="nav-actions-aesthetic">
+            
+            {/* User Profile Capsule */}
+            <div className="user-profile-badge" title="Logged in as so_arteaga">
+              <img
+                src="/assets/images/avatar-1.jpg"
+                alt="User avatar for so_arteaga"
+                className="user-profile-avatar"
+              />
+              <span className="user-profile-name">so_arteaga</span>
+            </div>
+
+            {/* Language Switcher Dropdown */}
+            <div className="language-selector-wrapper">
+              <button
+                type="button"
+                className="language-selector-btn"
+                onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+                aria-label="Select Language"
+              >
+                <span>{selectedLang}</span>
+                <ChevronDown size={14} className={langDropdownOpen ? 'rotate-180' : ''} />
+              </button>
+
+              {langDropdownOpen && (
+                <div className="language-dropdown-menu">
+                  {['EN', 'ES', 'FR', 'HI'].map((lang) => (
+                    <button
+                      key={lang}
+                      type="button"
+                      className={`lang-option ${selectedLang === lang ? 'active' : ''}`}
+                      onClick={() => {
+                        setSelectedLang(lang);
+                        setLangDropdownOpen(false);
+                      }}
+                    >
+                      {lang}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Quick Order Button */}
             <button
               type="button"
-              className="btn btn-order-pill"
+              className="btn-order-compact"
               onClick={openReserveModal}
+              title="Order Online / Reserve Table"
             >
-              <span>ORDER ONLINE</span>
-              <ShoppingBag size={16} />
+              <ShoppingBag size={15} />
+              <span className="order-compact-text">Order</span>
             </button>
 
-            {/* Theme Toggle Button */}
+            {/* Dark/Light Mode Switcher */}
             <button
               type="button"
-              className="theme-toggle-btn"
+              className="theme-toggle-aesthetic"
               onClick={toggleTheme}
               aria-label={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} theme`}
               title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} theme`}
             >
-              {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+              {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
             </button>
 
-            {/* Mobile Hamburger Button */}
+            {/* Mobile Hamburger */}
             <button
               type="button"
-              className="hamburger-btn"
+              className="hamburger-btn-aesthetic"
               onClick={() => setMobileOpen(true)}
               aria-label="Open navigation menu"
             >
               <Menu size={22} />
             </button>
+
           </div>
         </div>
       </div>
@@ -155,9 +194,8 @@ export default function Navbar() {
       <div className={`mobile-drawer ${mobileOpen ? 'open' : ''}`} aria-hidden={!mobileOpen}>
         <div className="mobile-drawer-inner">
           <div className="mobile-drawer-header">
-            <div className="logo-text-group">
-              <span className="logo-title">Brewista</span>
-              <span className="logo-sub">COFFEE HOUSE</span>
+            <div className="brand-logo-aesthetic">
+              <span className="brand-text-minimal">coffee</span>
             </div>
             <button
               type="button"
@@ -169,20 +207,24 @@ export default function Navbar() {
             </button>
           </div>
 
+          <div className="mobile-user-row">
+            <img src="/assets/images/avatar-1.jpg" alt="User avatar" className="user-profile-avatar" />
+            <span className="user-profile-name">so_arteaga</span>
+          </div>
+
           <ul className="mobile-nav-links">
-            <li><a href="#hero" className="mobile-nav-link" onClick={closeMobile}>HOME</a></li>
-            <li><a href="#story" className="mobile-nav-link" onClick={closeMobile}>ABOUT US</a></li>
-            <li><a href="#menu" className="mobile-nav-link" onClick={closeMobile}>MENU</a></li>
-            <li><a href="#collection" className="mobile-nav-link" onClick={closeMobile}>SPECIALS</a></li>
-            <li><a href="#gallery" className="mobile-nav-link" onClick={closeMobile}>GALLERY</a></li>
-            <li><a href="#club" className="mobile-nav-link" onClick={closeMobile}>COFFEE CLUB</a></li>
-            <li><a href="#location" className="mobile-nav-link" onClick={closeMobile}>CONTACT</a></li>
+            <li><a href="#hero" className="mobile-nav-link" onClick={closeMobile}>Home</a></li>
+            <li><a href="#gallery" className="mobile-nav-link" onClick={closeMobile}>Gallery</a></li>
+            <li><a href="#story" className="mobile-nav-link" onClick={closeMobile}>About us</a></li>
+            <li><a href="#menu" className="mobile-nav-link" onClick={closeMobile}>Menu</a></li>
+            <li><a href="#collection" className="mobile-nav-link" onClick={closeMobile}>Specials</a></li>
+            <li><a href="#location" className="mobile-nav-link" onClick={closeMobile}>Contact</a></li>
           </ul>
 
           <div className="mobile-drawer-footer">
             <button
               type="button"
-              className="btn btn-forest btn-block"
+              className="btn btn-hero-order btn-block"
               onClick={() => {
                 closeMobile();
                 openReserveModal();

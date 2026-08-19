@@ -1,118 +1,308 @@
 'use client';
 
-import React from 'react';
-import { ArrowRight, Sparkles, Instagram, Facebook, Twitter, Phone } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Play, X, Volume2, VolumeX, ArrowRight, Instagram, Facebook, Twitter, Youtube, ChevronDown } from 'lucide-react';
 import { useModal } from '@/context/ModalContext';
+
+interface SlideData {
+  id: string;
+  badgeText: string;
+  titleLine1: string;
+  titleLine2: string;
+  subtext: string;
+  image: string;
+}
+
+const slides: SlideData[] = [
+  {
+    id: '01',
+    badgeText: 'ORIGIN & CRAFT • PURE BEANS • ROASTED DAILY •',
+    titleLine1: 'Pure roast',
+    titleLine2: 'is passion',
+    subtext: 'Carefully curated single-origin beans roasted to perfection, releasing notes of roasted cacao and hazelnut.',
+    image: '/assets/images/hero-coffee-splash.jpg'
+  },
+  {
+    id: '02',
+    badgeText: 'INSPIRATION DESIGN FOR COFFEE WEBSITE • EST. 2024 •',
+    titleLine1: 'All we need',
+    titleLine2: 'is coffee',
+    subtext: 'We source, roast and blend our coffee with passion, we select our teas with love ...',
+    image: '/assets/images/hero-coffee-splash.jpg'
+  },
+  {
+    id: '03',
+    badgeText: 'ARTISANAL BREWS • BARISTA MASTERED • SPECIALTY •',
+    titleLine1: 'Crafted brew',
+    titleLine2: 'for your soul',
+    subtext: 'Indulge in velvety espresso shots crowned with rich golden crema and micro-foamed organic steamed milk.',
+    image: '/assets/images/hero-coffee-splash.jpg'
+  }
+];
 
 export default function Hero() {
   const { openReserveModal } = useModal();
+  const [activeSlide, setActiveSlide] = useState(1); // Default to slide 02 (index 1)
+  const [isMotionReelOpen, setIsMotionReelOpen] = useState(false);
+  const [isVideoMuted, setIsVideoMuted] = useState(true);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const heroRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Parallax tilt effect on mouse move
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (!heroRef.current) return;
+    const rect = heroRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setMousePos({ x, y });
+  };
+
+  const handleMouseLeave = () => {
+    setMousePos({ x: 0, y: 0 });
+  };
+
+  const current = slides[activeSlide];
+
+  const handleScrollDown = () => {
+    const nextSection = document.getElementById('story') || document.getElementById('menu');
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
-    <section className="hero-section" id="hero">
-      {/* Background Organic Sage Blob Shapes */}
-      <div className="hero-sage-blob top-left" aria-hidden="true"></div>
-      <div className="hero-sage-blob top-right" aria-hidden="true"></div>
-      <div className="hero-sage-blob bottom-left" aria-hidden="true"></div>
+    <section 
+      className="hero-splash-section" 
+      id="hero"
+      ref={heroRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Ambient Lighting & Bokeh Glowing Backdrops */}
+      <div className="hero-splash-glow center-glow" aria-hidden="true" />
+      <div className="hero-splash-glow right-glow" aria-hidden="true" />
+      <div className="hero-bokeh-particle p-1" aria-hidden="true" />
+      <div className="hero-bokeh-particle p-2" aria-hidden="true" />
+      <div className="hero-bokeh-particle p-3" aria-hidden="true" />
+      <div className="hero-bokeh-particle p-4" aria-hidden="true" />
 
-      <div className="container">
-        <div className="hero-layout-grid">
-          {/* Left Column: Typography & CTAs */}
-          <div className="hero-left">
-            <h1 className="hero-main-title">
-              Good days<br />
-              start with<br />
-              <span className="serif-highlight">great coffee.</span>
-            </h1>
+      {/* Subtle Aesthetic Grid & Divider Guidelines */}
+      <div className="hero-aesthetic-lines" aria-hidden="true">
+        <div className="hero-grid-line line-left" />
+        <div className="hero-grid-line line-center" />
+        <div className="hero-grid-line line-right" />
+      </div>
 
-            <p className="hero-subtext">
-              Handcrafted coffee made from premium beans, perfectly brewed for you.
-            </p>
-
-            <div className="hero-cta-group">
-              <a href="#menu" className="btn btn-pill-forest">
-                <span>EXPLORE MENU</span>
-                <ArrowRight size={17} />
-              </a>
-              <a href="#story" className="btn btn-pill-outline">
-                <span>OUR STORY</span>
-              </a>
+      <div className="hero-splash-container">
+        <div className="hero-splash-content-grid">
+          
+          {/* Left Column: Typography, Circular Badge & Slider */}
+          <div className="hero-splash-left">
+            
+            {/* Rotating Circular Text Badge */}
+            <div className="hero-circular-badge-container">
+              <svg viewBox="0 0 160 160" className="hero-rotating-badge" aria-hidden="true">
+                <defs>
+                  <path
+                    id="textCircle"
+                    d="M 80, 80 m -62, 0 a 62,62 0 1,1 124,0 a 62,62 0 1,1 -124,0"
+                  />
+                </defs>
+                <text className="rotating-badge-text">
+                  <textPath href="#textCircle" startOffset="0%">
+                    {current.badgeText}
+                  </textPath>
+                </text>
+              </svg>
+              {/* Central Bean Glyph */}
+              <div className="badge-center-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" strokeOpacity="0.4" strokeDasharray="2 2" />
+                  <path d="M7 12c0-3.5 2-6 5-6s5 2.5 5 6-2 6-5 6-5-2.5-5-6z" fill="var(--color-caramel)" fillOpacity="0.3" />
+                  <path d="M12 6c-1 3-1 9 0 12" stroke="var(--color-caramel)" />
+                </svg>
+              </div>
             </div>
 
-            {/* Social Icons Row */}
-            <div className="hero-social-row">
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hero-social-icon"
-                aria-label="Instagram"
+            {/* Main Headline */}
+            <h1 className="hero-splash-title">
+              <span className="title-white-line">{current.titleLine1}</span>
+              <span className="title-caramel-line">{current.titleLine2}</span>
+            </h1>
+
+            {/* Subtitle */}
+            <p className="hero-splash-description">
+              {current.subtext}
+            </p>
+
+            {/* Slide Indicators: 01  02  03 */}
+            <div className="hero-pagination-row">
+              {slides.map((slide, index) => (
+                <button
+                  key={slide.id}
+                  type="button"
+                  className={`hero-page-number ${activeSlide === index ? 'active' : ''}`}
+                  onClick={() => setActiveSlide(index)}
+                  aria-label={`Go to slide ${slide.id}`}
+                >
+                  <span className="page-number-text">{slide.id}</span>
+                  {activeSlide === index && <span className="active-dot" />}
+                </button>
+              ))}
+            </div>
+
+            {/* Quick Action Button */}
+            <div className="hero-action-pills">
+              <button 
+                type="button" 
+                className="btn btn-hero-order"
+                onClick={openReserveModal}
               >
-                <Instagram size={15} />
-              </a>
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hero-social-icon"
-                aria-label="Facebook"
-              >
-                <Facebook size={15} />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hero-social-icon"
-                aria-label="Twitter"
-              >
-                <Twitter size={15} />
-              </a>
-              <a
-                href="tel:+14164856464"
-                className="hero-social-icon"
-                aria-label="Contact via Phone"
-              >
-                <Phone size={15} />
-              </a>
+                <span>ORDER FRESH BREW</span>
+                <ArrowRight size={16} />
+              </button>
+            </div>
+
+          </div>
+
+          {/* Right Column: Dynamic Splash Coffee Cup Visual */}
+          <div className="hero-splash-right">
+            <div 
+              className="hero-splash-showcase"
+              style={{
+                transform: `perspective(1000px) rotateY(${mousePos.x * 12}deg) rotateX(${-mousePos.y * 12}deg) translateY(${mousePos.y * -8}px)`
+              }}
+            >
+              {/* Radial Golden Aura Behind Cup */}
+              <div className="hero-cup-aura" aria-hidden="true" />
+              
+              {/* Splash Image Visual */}
+              <div className="hero-cup-canvas-wrapper">
+                <img
+                  src={current.image}
+                  alt="Aesthetic white porcelain coffee cup splashing freshly brewed espresso and coffee grounds"
+                  className="hero-cup-splash-img"
+                />
+              </div>
+
+              {/* Floating Coffee Roast Tag */}
+              <div className="hero-floating-spec-tag">
+                <span className="spec-tag-accent">100% ARABICA</span>
+                <span className="spec-tag-sub">Micro-Roast Batch #48</span>
+              </div>
             </div>
           </div>
 
-          {/* Right Column: Hero Visual with Ceramic Green Cup & Floating Seal */}
-          <div className="hero-right">
-            <div className="hero-visual-composition">
-              {/* Organic Sage Backdrop Disk */}
-              <div className="hero-organic-disk"></div>
+        </div>
 
-              {/* Coffee Cup & Beans Showcase */}
-              <div className="hero-cup-wrapper">
-                <img
-                  src="/assets/images/menu-himalayan-latte.jpg"
-                  alt="Artisanal green ceramic cup of freshly brewed latte with latte art"
-                  className="hero-cup-image"
-                />
+        {/* Bottom Interactive Footer Bar */}
+        <div className="hero-bottom-bar">
+          
+          {/* Motion Reel Button */}
+          <div className="bottom-bar-left">
+            <button
+              type="button"
+              className="motion-reel-btn"
+              onClick={() => setIsMotionReelOpen(true)}
+              aria-label="Play Motion Reel Video"
+            >
+              <span className="play-icon-circle">
+                <Play size={14} fill="currentColor" />
+              </span>
+              <span className="motion-reel-label">Motion Reel</span>
+            </button>
+          </div>
 
-                {/* Steam Rising Animation Elements */}
-                <div className="steam-line steam-1"></div>
-                <div className="steam-line steam-2"></div>
+          {/* Center Info / Template Tag */}
+          <div className="bottom-bar-center">
+            <span className="inspiration-template-text">Website Inspiration Template</span>
+          </div>
+
+          {/* Social Links Row */}
+          <div className="bottom-bar-socials">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="bottom-social-link" aria-label="Facebook">
+              <Facebook size={15} />
+            </a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="bottom-social-link" aria-label="YouTube">
+              <Youtube size={16} />
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="bottom-social-link" aria-label="Twitter">
+              <Twitter size={15} />
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="bottom-social-link" aria-label="Instagram">
+              <Instagram size={15} />
+            </a>
+          </div>
+
+          {/* Right: Mouse Scroll Indicator */}
+          <div className="bottom-bar-right">
+            <button
+              type="button"
+              className="mouse-scroll-indicator"
+              onClick={handleScrollDown}
+              aria-label="Scroll to next section"
+              title="Scroll down"
+            >
+              <div className="mouse-shell">
+                <div className="mouse-wheel" />
               </div>
+            </button>
+          </div>
 
-              {/* Floating Badge: PREMIUM QUALITY BEANS */}
-              <div className="hero-floating-seal">
-                <div className="seal-beans-icon">
-                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8">
-                    <path d="M12 3C7 3 3 7 3 12C3 17 7 21 12 21C17 21 21 17 21 12C21 7 17 3 12 3Z" strokeDasharray="2 2" />
-                    <path d="M7 12C7 8 10 6 12 6C14 6 17 8 17 12C17 16 14 18 12 18C10 18 7 16 7 12Z" fill="var(--color-caramel)" fillOpacity="0.2" />
-                    <path d="M12 6C11 9 11 15 12 18" stroke="var(--color-forest)" />
-                  </svg>
-                </div>
-                <span className="seal-text-small">PREMIUM</span>
-                <span className="seal-text-bold">QUALITY</span>
-                <span className="seal-text-sub">BEANS</span>
+        </div>
+
+      </div>
+
+      {/* Motion Reel Video Modal */}
+      {isMotionReelOpen && (
+        <div className="motion-reel-modal" role="dialog" aria-modal="true" aria-label="Motion Reel Video Player">
+          <div className="motion-reel-backdrop" onClick={() => setIsMotionReelOpen(false)} />
+          <div className="motion-reel-container">
+            <div className="motion-reel-header">
+              <div className="reel-title-group">
+                <span className="reel-tag">BEHIND THE CRAFT</span>
+                <h3 className="reel-title">Artisanal Pour & Roasting Experience</h3>
               </div>
+              <div className="reel-controls-group">
+                <button
+                  type="button"
+                  className="reel-control-btn"
+                  onClick={() => {
+                    if (videoRef.current) {
+                      videoRef.current.muted = !isVideoMuted;
+                      setIsVideoMuted(!isVideoMuted);
+                    }
+                  }}
+                  aria-label={isVideoMuted ? 'Unmute' : 'Mute'}
+                >
+                  {isVideoMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                </button>
+                <button
+                  type="button"
+                  className="reel-close-btn"
+                  onClick={() => setIsMotionReelOpen(false)}
+                  aria-label="Close Motion Reel"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+            </div>
+
+            <div className="motion-reel-video-wrapper">
+              <video
+                ref={videoRef}
+                src="/assets/videos/hero-video.mp4"
+                autoPlay
+                loop
+                muted={isVideoMuted}
+                playsInline
+                className="motion-reel-video"
+              />
             </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }
